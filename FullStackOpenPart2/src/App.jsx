@@ -23,7 +23,7 @@ const App = (props) => {
 
   const addNumber = (event) => {
     event.preventDefault();
-    if (persons.find((person) => person.person === newName)) {
+    if (persons.find((person) => person.name === newName)) {
       alert(`${newName} is already added to phone book`);
       setNewName("");
       setNewNumber("");
@@ -31,14 +31,14 @@ const App = (props) => {
     }
 
     const personObject = {
-      person: newName,
+      name: newName,
       number: newNumber,
     };
 
     userService.create(personObject).then((response) => {
       setPersons(persons.concat(response.data));
       console.log(response.data);
-      setNotificationMessage(`Added ${response.data.person}`);
+      setNotificationMessage(`Added ${response.data.name}`);
       setTimeout(() => {
         setNotificationMessage(null);
       }, 5000);
@@ -61,7 +61,7 @@ const App = (props) => {
 
   const filteredPersons = newFilter
     ? persons.filter((person) =>
-        person.person.toLowerCase().includes(newFilter.toLowerCase()),
+        person.name.toLowerCase().includes(newFilter.toLowerCase()),
       )
     : persons;
 
