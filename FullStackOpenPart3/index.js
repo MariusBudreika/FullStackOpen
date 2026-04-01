@@ -2,7 +2,11 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 
-app.use(morgan("tiny"));
+morgan.token("body", (req) => JSON.stringify(req.body));
+
+app.use(
+  morgan(":method :url :status :res[content-length] - :response-time ms :body"),
+);
 app.use(express.json());
 
 let persons = [
@@ -68,7 +72,6 @@ app.delete("/api/persons/:id", (request, response) => {
 
 app.post("/api/persons", (request, response) => {
   const body = request.body;
-
   if (persons.find((person) => person.name === body.name)) {
     return response.status(409).json({
       error: "The name already exists in the phonebook",
