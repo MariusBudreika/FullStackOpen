@@ -27,6 +27,14 @@ const peopleSchema = new mongoose.Schema({
   number: String,
 });
 
+peopleSchema.set("toJSON", {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString();
+    delete returnedObject._id;
+    delete returnedObject.__v;
+  },
+});
+
 const Person = mongoose.model("Person", peopleSchema);
 
 if (personName && phoneNumber) {
