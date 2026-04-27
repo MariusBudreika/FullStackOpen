@@ -9,11 +9,18 @@ const password = process.argv[2];
 const personName = process.argv[3];
 const phoneNumber = process.argv[4];
 
-const url = `mongodb+srv://mariuzazDB:${password}@cluster0.dmvbog1.mongodb.net/phoneBookApp?appName=phoneBookApp0`;
-
 mongoose.set("strictQuery", false);
 
-mongoose.connect(url, { family: 4 });
+const url = process.env.MONGODB_URI;
+
+mongoose
+  .connect(url, { family: 4 })
+  .then((result) => {
+    console.log("connected to MongoDB");
+  })
+  .catch((error) => {
+    console.log("error connecting to MongoDB:", error.message);
+  });
 
 const peopleSchema = new mongoose.Schema({
   name: String,
@@ -29,6 +36,7 @@ if (personName && phoneNumber) {
   });
   person.save().then(() => {
     console.log(`added ${personName} number ${phoneNumber} to phonebook`);
+    mongoose.connection.close();
   });
 }
 
@@ -36,5 +44,6 @@ Person.find({}).then((result) => {
   result.forEach((person) => {
     console.log(person.name, person.number);
   });
-  mongoose.connection.close();
 });
+
+module.exports = mongoose.model("Person", peopleSchema);
