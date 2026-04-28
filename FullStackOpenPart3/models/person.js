@@ -5,7 +5,7 @@ if (process.argv.length < 3) {
   process.exit(1);
 }
 
-const password = process.argv[2];
+// const password = process.argv[2];
 const personName = process.argv[3];
 const phoneNumber = process.argv[4];
 
@@ -15,7 +15,7 @@ const url = process.env.MONGODB_URI;
 
 mongoose
   .connect(url, { family: 4 })
-  .then((result) => {
+  .then(() => {
     console.log("connected to MongoDB");
   })
   .catch((error) => {
